@@ -1,0 +1,33 @@
+Traceback (most recent call last):
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\botasaurus\browser_decorator.py", line 179, in run_task
+    result = func(driver, data)
+             ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\naugh\Desktop\yahoo mail\yahootest.py", line 52, in yahoo_login_task
+    email_input = driver.wait_for_element("input[name='username']", wait=Wait.LONG)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\botasaurus_driver\driver.py", line 1036, in wait_for_element
+    self, self._tab, self._run(self._tab.wait_for(selector, timeout=wait))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\botasaurus_driver\core\tab.py", line 1029, in wait_for
+    item = self.query_selector(selector)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\botasaurus_driver\core\tab.py", line 545, in query_selector
+    doc: cdp.dom.Node = self.send(cdp.dom.get_document(-1, True))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\botasaurus_driver\core\connection.py", line 249, in send
+    self.websocket.send(tx)
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\websocket\_app.py", line 290, in send
+    if not self.sock or self.sock.send(data, opcode) == 0:
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\websocket\_core.py", line 297, in send
+    return self.send_frame(frame)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\websocket\_core.py", line 337, in send_frame
+    l = self._send(data)
+        ^^^^^^^^^^^^^^^^
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\websocket\_core.py", line 559, in _send
+    return send(self.sock, data)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\websocket\_socket.py", line 152, in send
+    raise WebSocketConnectionClosedException("socket is already closed.")
+websocket._exceptions.WebSocketConnectionClosedException: socket is already closed.
