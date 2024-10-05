@@ -6,14 +6,14 @@ from playwright.sync_api import sync_playwright
 import pyautogui
 
 # Define the Yahoo credentials
-YAHOO_EMAIL = "anur92833@yahoo.com"
-YAHOO_PASSWORD = "Khar@203916"
+YAHOO_EMAIL = "XXXX@yahoo.com"
+YAHOO_PASSWORD = "XYXYX@203916"
 
 # Define the list of recipient email addresses
 RECIPIENT_EMAILS = [
-    "anur92833@yahoo.com",
-    "pasisalive2009@gmail.com",
-    "recipient3@example.com",
+    "XXXX@yahoo.com",
+    "XXXXe2009@gmail.com",
+    "XXXX3@example.com",
     # Add more recipient email addresses as needed
 ]
 

@@ -77,8 +77,8 @@ def is_ip_used(ip, filename='yahoo.txt'):
     
 
 # Define the Yahoo credentials
-YAHOO_EMAIL = "anur92833@yahoo.com"
-YAHOO_PASSWORD = "Khar@203916"
+YAHOO_EMAIL = "XXX@yahoo.com"
+YAHOO_PASSWORD = "XXX@203916"
 
 # Define the list of recipient email addresses
 RECIPIENT_EMAILS = [
