@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\botasaurus\browser_decorator.py", line 179, in run_task
+    result = func(driver, data)
+             ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\naugh\Desktop\yahoo mail\yahoo.py", line 38, in yahoo_login_task
+    driver.get("https://mail.yahoo.com/d/onboarding")
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\botasaurus_driver\driver.py", line 656, in get
+    wait_till_document_is_ready(self._tab, self.config.wait_for_complete_page_load)
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\botasaurus_driver\solve_cloudflare_captcha.py", line 27, in wait_till_document_is_ready
+    raise TimeoutError("Document did not become ready within 30 seconds")
+TimeoutError: Document did not become ready within 30 seconds
