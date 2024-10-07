@@ -139,7 +139,7 @@ def yahoo_login_task(driver: Driver, data):
 
     # Step 6: Wait
     # for the inbox to load by checking for a unique element
-    time.sleep(60)
+    time.sleep(10)
     try:
         inbox_element = driver.wait_for_element("a[title='Inbox']", wait=Wait.LONG)
         print("Inbox page has loaded.")
