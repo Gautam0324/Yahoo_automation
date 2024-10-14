@@ -21,118 +21,10 @@ YAHOO_PASSWORD = "Goris&79138"
 
 # Define the list of recipient email addresses
 RECIPIENT_EMAILS = [
-    "aasthafoods2005@gmail.com",
-    "ay5154698@gmail.com",
-    # "basf-in-mh-gst@basf.com",
-    # "burhanipan11@gmail.com",
-    # "burhanipan13@gmail.com",
-    # "burhanipan14@gmail.com",
-    # "burhanipan15@gmail.com",
-    # "burhanipan16@gmail.com",
-    # "burhanipan4@gmail.com",
-    # "burhanipan5@gmail.com",
-    # "burhanipan6@gmail.com",
-    # "burhanipan7@gmail.com",
-    # "burhanipan8@gmail.com",
-    # "burhanipan9@gmail.com",
-"chriswilsonraw@gmail.com",
-"cponmany@gmail.com",
-"deveshjha85@gmail.com",
-"dhanawadeakash23@gmail.com",
-"dhanawadeakash641@gmail.com",
-"dubbabatliwala@gmail.com",
-"internalwarmup7@gmail.com",
-"jaadhavravi76@gmail.com",
-"jaanibuk1305@gmail.com",
-"jagdishraje89@gmail.com",
-"jaleela287@gmail.com",
-"janardanbuk1305@gmail.com",
- "jayraje450@gmail.com",
-"jih92978@gmail.com",
-"jilezindagi5@gmail.com",
-"johnbuk1305@gmail.com",
-"kishandadar83@gmail.com",
-"kunal.netcore1@gmail.com",
-"kunal.netcore@gmail.com",
-"kunal6322u@gmail.com",
- "manojbandbe14@gmail.com",
-"manojbandbe40@gmail.com",
-"mrsautomationengineers@gmail.com",
-"pratapnayak56860@gmail.com",
-"sachin.c@samsung.com",
-"utsavkumar2@gmail.com",
-"v.more2016@gmail.com",
-"vaingankarhindavi@gmail.com",
-"yogeshhargude1262@gmail.com",
-"aasthafoods2005@gmail.com",
-"ad2125956@gmail.com",
-"adhanawade799@gmail.com",
-"adv.gurpreetsharma@gmail.com",
-"akashdhanawade280@gmail.com",
-"akashdhanawade623@gmail.com",
-"akashdhanawade806@gmail.com",
-"akashhhdd2019@gmail.com",
-"akiidhanawade2419@gmail.com",
-"akuudhanawade1980@gmail.com",
-"ali68237@gmail.com",
-"amannetcore28@gmail.com",
-"astalh21@gmail.com",
-"astilah22@gmail.com",
-"be10ishere@gmail.com",
-"bhim.cartoon@gmail.com",
-"brs.reddy2010@gmail.com",
-"burhanipan12@gmail.com",
-"casiddiqui0786@gmail.com",
-"csamy402@gmail.com",
-"davinder21a@gmail.com",
-"gkkumargautam102@gmail.com",
-"jaleela287@gmail.com",
-"josephjohn1966@gmail.com",
-"magaryogesh65@gmail.com",
-"rajuasholiya2017@gmail.com",
-"sandipddukare@gmail.com",
-"satish5692@gmail.com",
-"swami5700@gmail.com",
-"tvavinash730@gmail.com",
-"utsavkumar2@gmail.com",
-
-# Continue with the second batch of emails
-"anur92833@yahoo.com",
-"paisalive2009@gmail.com",
-"sgautamsharma146@gmail.com",
-"shersiyaomprakash.phx@gmail.com",
-"shreengineers.miraj@gmail.com",
-"naseemahamed21@gmail.com",
-"saxenaprafful2605@gmail.com",
-"pawan2065@gmail.com",
-"rakesh.amarujala@gmail.com",
-"sgipl2477@gmail.com",
-"nirbhayshukla21@gmail.com",
-"mohan1961r@gmail.com",
-"chow.chauhan21@gmail.com",
-"malini310588@gmail.com",
-"ashankar191957@gmail.com",
-"brnagpal29@gmail.com",
-"skmamrej2018@gmail.com",
-"quasars.tech@gmail.com",
-"harisps123@gmail.com",
-"parathaabbas@gmail.com",
-"vurimi0306@gmail.com",
-"diba12kar@gmail.com",
-"parikhautomobilesservice@gmail.com",
-"islamjairul03@gmail.com",
-"nitin.pipaliya33@gmail.com",
-"noble.fusion2010@gmail.com",
-"tambawalahakim@gmail.com",
-"alok1983.sri@gmail.com",
-"goswamip74@gmail.com",
-"cherukuri.sam@gmail.com",
-"kpushpender645@gmail.com",
-"pralayk.p@gmail.com",  
-"kamalkantj75@gmail.com",
-"kulkarnilabfoodwater@gmail.com",
-"birendra173173@gmail.com",
-"jeetu23lic@gmail.com"
+    "sgautamsharma146@gmail.com",
+    "sgautamsharma146@gmail.com",
+    "sgautamsharma146@gmail.com"
+    
 ]
 
 # Subject
@@ -186,6 +78,7 @@ def yahoo_login_task(driver: Driver, data):
 
 # Function to compose and send emails
 def start_composing_emails(driver: Driver):
+    total_sent = 0  # Initialize a counter for sent emails
     for recipient in RECIPIENT_EMAILS:
         time.sleep(2)  # Ensure that the inbox is fully loaded
 
@@ -220,8 +113,11 @@ def start_composing_emails(driver: Driver):
             send_button = driver.get_element_with_exact_text("Send", wait=Wait.LONG)
             send_button.click()
             print(f"Email successfully sent to {recipient}.")
+            total_sent += 1  # Increment the counter for each successfully sent email
         except Exception as e:
             print(f"Send button not found for {recipient}: {str(e)}")
+
+    print(f"Total emails sent: {total_sent}")  # Print total count of sent emails
 
 # Execute the login task and send emails
 yahoo_login_task(data=None)

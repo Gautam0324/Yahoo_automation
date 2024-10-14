@@ -1,0 +1,18 @@
+[
+    {
+        "name": "NID",
+        "value": "518=Iry6gEsCw9HN7Zt0x8rS77jmM02oZz7Gr2qflcm1Wcas08i3kVIHjak1eKZtl48cjrj83RjPVqO7hJ_KbbNl-MO2iJrHk-9S8Ag36hPjKVBpTbD_gAacS5yGP4xU6csrKV_BAT2feN4OJND-iAV9Q7Ktn4GPqoB2Q-ZqIiyTBzlNGpEUqbc",
+        "domain": ".google.com",
+        "path": "/",
+        "expires": 1744696817.083551,
+        "size": 186,
+        "httpOnly": true,
+        "secure": true,
+        "session": false,
+        "sameSite": "None",
+        "priority": "Medium",
+        "sameParty": false,
+        "sourceScheme": "Secure",
+        "sourcePort": 443
+    }
+]

@@ -82,6 +82,82 @@ YAHOO_PASSWORD = "Asdf#1234@"
 
 # Define the list of recipient email addresses
 RECIPIENT_EMAILS = [
+    "aasthafoods2005@gmail.com",
+    "ay5154698@gmail.com",
+    "basf-in-mh-gst@basf.com",
+    "burhanipan11@gmail.com",
+    "burhanipan13@gmail.com",
+    "burhanipan14@gmail.com",
+    "burhanipan15@gmail.com",
+    "burhanipan16@gmail.com",
+    "burhanipan4@gmail.com",
+    "burhanipan5@gmail.com",
+    "burhanipan6@gmail.com",
+    "burhanipan7@gmail.com",
+    "burhanipan8@gmail.com",
+    "burhanipan9@gmail.com",
+    "chriswilsonraw@gmail.com",
+    "cponmany@gmail.com",
+    "deveshjha85@gmail.com",
+    "dhanawadeakash23@gmail.com",
+    "dhanawadeakash641@gmail.com",
+    "dubbabatliwala@gmail.com",
+    "internalwarmup7@gmail.com",
+    "jaadhavravi76@gmail.com",
+    "jaanibuk1305@gmail.com",
+    "jagdishraje89@gmail.com",
+    "jaleela287@gmail.com",
+    "janardanbuk1305@gmail.com",
+    "jayraje450@gmail.com",
+    "jih92978@gmail.com",
+    "jilezindagi5@gmail.com",
+    "johnbuk1305@gmail.com",
+    "kishandadar83@gmail.com",
+    "kunal.netcore1@gmail.com",
+    "kunal.netcore@gmail.com",
+    "kunal6322u@gmail.com",
+    "manojbandbe14@gmail.com",
+    "manojbandbe40@gmail.com",
+    "mrsautomationengineers@gmail.com",
+    "pratapnayak56860@gmail.com",
+    "sachin.c@samsung.com",
+    "utsavkumar2@gmail.com",
+    "v.more2016@gmail.com",
+    "vaingankarhindavi@gmail.com",
+    "yogeshhargude1262@gmail.com",
+    "aasthafoods2005@gmail.com",
+    "ad2125956@gmail.com",
+    "adhanawade799@gmail.com",
+    "adv.gurpreetsharma@gmail.com",
+    "akashdhanawade280@gmail.com",
+    "akashdhanawade623@gmail.com",
+    "akashdhanawade806@gmail.com",
+    "akashhhdd2019@gmail.com",
+    "akiidhanawade2419@gmail.com",
+    "akuudhanawade1980@gmail.com",
+    "ali68237@gmail.com",
+    "amannetcore28@gmail.com",
+    "astalh21@gmail.com",
+    "astilah22@gmail.com",
+    "be10ishere@gmail.com",
+    "bhim.cartoon@gmail.com",
+    "brs.reddy2010@gmail.com",
+    "burhanipan12@gmail.com",
+    "casiddiqui0786@gmail.com",
+    "csamy402@gmail.com",
+    "davinder21a@gmail.com",
+    "gkkumargautam102@gmail.com",
+    "jaleela287@gmail.com",
+    "josephjohn1966@gmail.com",
+    "magaryogesh65@gmail.com",
+    "rajuasholiya2017@gmail.com",
+    "sandipddukare@gmail.com",
+    "satish5692@gmail.com",
+    "swami5700@gmail.com",
+    "tvavinash730@gmail.com",
+    "utsavkumar2@gmail.com",
+    
+    # Continue with the second batch of emails
     "anur92833@yahoo.com",
     "paisalive2009@gmail.com",
     "sgautamsharma146@gmail.com",
@@ -122,10 +198,10 @@ RECIPIENT_EMAILS = [
 
 
 # Subject
-SUBJECT = " Haryana Election "
+SUBJECT = " LATEST NEWS 'RATAN TATA PASSED AWAY' "
 
 # Message body
-BODY = "अबकी बार, सैनी ने टाली हार! HIT रहा है चुनाव से पहले BJP का CM बदलने का फॉर्मूला, सिर्फ इस राज्य में खाई थी मात Click this to read more  https://bitshrt.com/4Bk"
+BODY = "Ratan Tata Passes Away Live Updates: Manmohan Singh, LK Advani remember veteran industrialist's 'warmth, generosity and kindness' Click this to read more  https://bitshrt.com/4Bm"
 
 # Proxy Settings
 # proxy_settings = "http://62.171.141.103:6781"
