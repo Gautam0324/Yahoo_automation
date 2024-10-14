@@ -16,8 +16,8 @@ def run_adb_command(command):
         return None
 
 # Define the Yahoo credentials
-YAHOO_EMAIL = "sarmagori@yahoo.com"
-YAHOO_PASSWORD = "Goris&79138"
+YAHOO_EMAIL = "harishjain8764@yahoo.com"
+YAHOO_PASSWORD = "@$%^Harish$$543"
 
 # Define the list of recipient email addresses
 RECIPIENT_EMAILS = [

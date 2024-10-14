@@ -83,7 +83,7 @@ YAHOO_PASSWORD = "Asdf#1234@"
 # Define the list of recipient email addresses
 RECIPIENT_EMAILS = [
     "aasthafoods2005@gmail.com",
-    "ay5154698@gmail.com",
+    "ay5154698@gmail.com", 
     "basf-in-mh-gst@basf.com",
     "burhanipan11@gmail.com",
     "burhanipan13@gmail.com",

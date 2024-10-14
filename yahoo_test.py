@@ -1,10 +1,36 @@
 import time
 import subprocess
-import requests
+import random
+from datetime import datetime, timedelta
 from botasaurus.browser import browser, Driver, Wait
-from selenium.webdriver.common.keys import Keys
-from playwright.sync_api import sync_playwright
 import pyautogui
+import os
+
+# Define the Yahoo credentials
+YAHOO_EMAIL = "harishjain8764@yahoo.com"
+YAHOO_PASSWORD = "@$%^Harish$$543"
+
+# Define the list of recipient email addresses
+RECIPIENT_EMAILS = [
+    "paisalive2009@gmail.com",
+    "gautamsharma@phx.co.in",
+    "sgautamsharma146@gmail.com",
+    "harishjain8764@yahoo.com",
+    "ankitasha98@gmail.com"
+    # Add your other email addresses here...
+]
+
+# Subject
+SUBJECT = "What can Robot's do?"
+
+# Message body
+BODY = "Essentially, there are as many different types of robots as there are tasks for them to perform. Robots can perform some tasks better than humans, but others are best left to people and not machines. Click this to read more  https://bitshrt.com/4Br"
+
+# File to save sent email addresses
+SENT_EMAILS_FILE = "sent_emails.txt"
+# File to store the last reset time
+LAST_RESET_FILE = "last_reset.txt"
+
 
 # Function to run ADB commands
 def run_adb_command(command):
@@ -15,131 +41,46 @@ def run_adb_command(command):
         print(f"Error running ADB command: {e.stderr.decode('utf-8')}")
         return None
 
-# Define the Yahoo credentials
-YAHOO_EMAIL = "sarmagori@yahoo.com"
-YAHOO_PASSWORD = "Goris&79138"
 
-# Define the list of recipient email addresses
-RECIPIENT_EMAILS = [
-    "aasthafoods2005@gmail.com",
-    "ay5154698@gmail.com",
-    # "basf-in-mh-gst@basf.com",
-    # "burhanipan11@gmail.com",
-    # "burhanipan13@gmail.com",
-    # "burhanipan14@gmail.com",
-    # "burhanipan15@gmail.com",
-    # "burhanipan16@gmail.com",
-    # "burhanipan4@gmail.com",
-    # "burhanipan5@gmail.com",
-    # "burhanipan6@gmail.com",
-    # "burhanipan7@gmail.com",
-    # "burhanipan8@gmail.com",
-    # "burhanipan9@gmail.com",
-"chriswilsonraw@gmail.com",
-"cponmany@gmail.com",
-"deveshjha85@gmail.com",
-"dhanawadeakash23@gmail.com",
-"dhanawadeakash641@gmail.com",
-"dubbabatliwala@gmail.com",
-"internalwarmup7@gmail.com",
-"jaadhavravi76@gmail.com",
-"jaanibuk1305@gmail.com",
-"jagdishraje89@gmail.com",
-"jaleela287@gmail.com",
-"janardanbuk1305@gmail.com",
- "jayraje450@gmail.com",
-"jih92978@gmail.com",
-"jilezindagi5@gmail.com",
-"johnbuk1305@gmail.com",
-"kishandadar83@gmail.com",
-"kunal.netcore1@gmail.com",
-"kunal.netcore@gmail.com",
-"kunal6322u@gmail.com",
- "manojbandbe14@gmail.com",
-"manojbandbe40@gmail.com",
-"mrsautomationengineers@gmail.com",
-"pratapnayak56860@gmail.com",
-"sachin.c@samsung.com",
-"utsavkumar2@gmail.com",
-"v.more2016@gmail.com",
-"vaingankarhindavi@gmail.com",
-"yogeshhargude1262@gmail.com",
-"aasthafoods2005@gmail.com",
-"ad2125956@gmail.com",
-"adhanawade799@gmail.com",
-"adv.gurpreetsharma@gmail.com",
-"akashdhanawade280@gmail.com",
-"akashdhanawade623@gmail.com",
-"akashdhanawade806@gmail.com",
-"akashhhdd2019@gmail.com",
-"akiidhanawade2419@gmail.com",
-"akuudhanawade1980@gmail.com",
-"ali68237@gmail.com",
-"amannetcore28@gmail.com",
-"astalh21@gmail.com",
-"astilah22@gmail.com",
-"be10ishere@gmail.com",
-"bhim.cartoon@gmail.com",
-"brs.reddy2010@gmail.com",
-"burhanipan12@gmail.com",
-"casiddiqui0786@gmail.com",
-"csamy402@gmail.com",
-"davinder21a@gmail.com",
-"gkkumargautam102@gmail.com",
-"jaleela287@gmail.com",
-"josephjohn1966@gmail.com",
-"magaryogesh65@gmail.com",
-"rajuasholiya2017@gmail.com",
-"sandipddukare@gmail.com",
-"satish5692@gmail.com",
-"swami5700@gmail.com",
-"tvavinash730@gmail.com",
-"utsavkumar2@gmail.com",
+def load_sent_emails():
+    """Load sent emails from a file."""
+    try:
+        with open(SENT_EMAILS_FILE, "r") as file:
+            return set(line.strip() for line in file)
+    except FileNotFoundError:
+        return set()
 
-# Continue with the second batch of emails
-"anur92833@yahoo.com",
-"paisalive2009@gmail.com",
-"sgautamsharma146@gmail.com",
-"shersiyaomprakash.phx@gmail.com",
-"shreengineers.miraj@gmail.com",
-"naseemahamed21@gmail.com",
-"saxenaprafful2605@gmail.com",
-"pawan2065@gmail.com",
-"rakesh.amarujala@gmail.com",
-"sgipl2477@gmail.com",
-"nirbhayshukla21@gmail.com",
-"mohan1961r@gmail.com",
-"chow.chauhan21@gmail.com",
-"malini310588@gmail.com",
-"ashankar191957@gmail.com",
-"brnagpal29@gmail.com",
-"skmamrej2018@gmail.com",
-"quasars.tech@gmail.com",
-"harisps123@gmail.com",
-"parathaabbas@gmail.com",
-"vurimi0306@gmail.com",
-"diba12kar@gmail.com",
-"parikhautomobilesservice@gmail.com",
-"islamjairul03@gmail.com",
-"nitin.pipaliya33@gmail.com",
-"noble.fusion2010@gmail.com",
-"tambawalahakim@gmail.com",
-"alok1983.sri@gmail.com",
-"goswamip74@gmail.com",
-"cherukuri.sam@gmail.com",
-"kpushpender645@gmail.com",
-"pralayk.p@gmail.com",  
-"kamalkantj75@gmail.com",
-"kulkarnilabfoodwater@gmail.com",
-"birendra173173@gmail.com",
-"jeetu23lic@gmail.com"
-]
 
-# Subject
-SUBJECT = " What can Robot's do? "
+def load_last_reset_time():
+    """Load the last reset time from a file."""
+    try:
+        with open(LAST_RESET_FILE, "r") as file:
+            last_reset_str = file.read().strip()
+            return datetime.strptime(last_reset_str, "%Y-%m-%d %H:%M:%S")
+    except (FileNotFoundError, ValueError):
+        return None
 
-# Message body
-BODY = "Essentially, there are as many different types of robots as there are tasks for them to perform. Robots can perform some tasks better than humans, but others are best left to people and not machines. Click this to read more  https://bitshrt.com/4Br"
+
+def save_last_reset_time():
+    """Save the current time as the last reset time."""
+    with open(LAST_RESET_FILE, "w") as file:
+        file.write(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
+
+def reset_sent_emails_if_needed():
+    """Reset the sent_emails.txt file if 24 hours have passed since the last reset."""
+    last_reset_time = load_last_reset_time()
+    now = datetime.now()
+
+    if last_reset_time is None or now - last_reset_time >= timedelta(hours=24):
+        # If 24 hours have passed or it's the first run, clear the file and save the current time
+        with open(SENT_EMAILS_FILE, "w") as file:
+            file.write("")  # Clear the file
+        print("24 hours have passed. sent_emails.txt has been reset.")
+        save_last_reset_time()
+    else:
+        print("Less than 24 hours since the last reset. No reset needed.")
+
 
 @browser(tiny_profile=True, profile=YAHOO_EMAIL)
 def yahoo_login_task(driver: Driver, data):
@@ -151,7 +92,7 @@ def yahoo_login_task(driver: Driver, data):
         compose_button = driver.get_element_with_exact_text("Compose", wait=Wait.SHORT)
         if compose_button:
             print("User is already logged in. Skipping login process and starting email composition.")
-            start_composing_emails(driver)  # If logged in, start composing
+            start_composing_emails(driver)
             return
     except Exception:
         print("User is not logged in. Proceeding with login process...")
@@ -179,15 +120,28 @@ def yahoo_login_task(driver: Driver, data):
     try:
         inbox_element = driver.wait_for_element("a[title='Inbox']", wait=Wait.LONG)
         print("Inbox page has loaded.")
-        start_composing_emails(driver)  # Now that we're logged in, start composing emails
+        start_composing_emails(driver)
     except Exception as e:
         print("Inbox did not load properly:", str(e))
-        return  # Exit if inbox doesn't load
+        return
+
 
 # Function to compose and send emails
 def start_composing_emails(driver: Driver):
-    for recipient in RECIPIENT_EMAILS:
-        time.sleep(2)  # Ensure that the inbox is fully loaded
+    sent_emails = load_sent_emails()  # Load already sent emails
+    total_recipients = len(RECIPIENT_EMAILS)
+    current_index = 0
+    limit = 4  # Set limit for emails to be sent in one run
+    sent_count = 0  # Counter for sent emails
+
+    while current_index < total_recipients and sent_count < limit:
+        recipient = RECIPIENT_EMAILS[current_index]
+
+        if recipient in sent_emails:  # Skip already sent emails
+            current_index += 1
+            continue
+
+        time.sleep(2)
 
         # Step 7: Click the "Compose" button
         try:
@@ -195,7 +149,8 @@ def start_composing_emails(driver: Driver):
             compose_button.click()
         except Exception as e:
             print(f"Compose button not found for {recipient}: {str(e)}")
-            continue  # Skip to the next recipient if the compose button is not found
+            current_index += 1
+            continue
 
         # Step 8: Add recipient email
         sender_input = driver.wait_for_element("input[id='message-to-field']", wait=Wait.LONG)
@@ -219,9 +174,52 @@ def start_composing_emails(driver: Driver):
         try:
             send_button = driver.get_element_with_exact_text("Send", wait=Wait.LONG)
             send_button.click()
-            print(f"Email successfully sent to {recipient}.")
+            sending_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            print(f"Email successfully sent to {recipient} at {sending_time}.")
+            sent_emails.add(recipient)  # Add to the set of sent emails
+            sent_count += 1  # Increment the sent counter
+
+            # Append the recipient email to the file
+            with open(SENT_EMAILS_FILE, "a") as file:
+                file.write(f"{recipient}\n")
+
+            current_index += 1
         except Exception as e:
             print(f"Send button not found for {recipient}: {str(e)}")
 
-# Execute the login task and send emails
-yahoo_login_task(data=None)
+        # Add random delay between 30 and 90 seconds before sending the next email
+        random_delay = random.randint(30, 90)
+        countdown_timer(random_delay)  # Call the countdown timer
+        time.sleep(random_delay)
+
+    # Step 12: Logout process (if required)
+    try:
+        profile_icon = driver.get_element_with_exact_text("Account", wait=Wait.LONG)
+        profile_icon.click()
+        time.sleep(1)
+        sign_out_button = driver.get_element_with_exact_text("Sign out", wait=Wait.LONG)
+        sign_out_button.click()
+        print("Logged out successfully.")
+    except Exception as e:
+        print("Error logging out:", str(e))
+
+
+# Countdown Timer Function
+def countdown_timer(seconds):
+    """Display a countdown in seconds before sending the next email."""
+    while seconds:
+        mins, secs = divmod(seconds, 60)
+        time_format = f'{mins:02}:{secs:02}'
+        print(f"Next email in: {time_format}", end='\r')
+        time.sleep(1)
+        seconds -= 1
+    print("\nTime to send the next email!")
+
+
+# Main program execution
+if __name__ == "__main__":
+    reset_sent_emails_if_needed()  # Reset the sent_emails.txt if necessary before starting
+    while True:
+        yahoo_login_task(data=None)
+        print("Waiting for 2 minutes before repeating the process...")
+        time.sleep(120)  # Wait for 2 minutes before starting again
