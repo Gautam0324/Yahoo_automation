@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\botasaurus\browser_decorator.py", line 179, in run_task
+    result = func(driver, data)
+             ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\naugh\Desktop\yahoo mail\yahoo_test.py", line 179, in yahoo_login_task
+    password_input = driver.wait_for_element("input[name='password']", wait=Wait.LONG)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\botasaurus_driver\driver.py", line 1036, in wait_for_element
+    self, self._tab, self._run(self._tab.wait_for(selector, timeout=wait))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\botasaurus_driver\core\tab.py", line 1035, in wait_for
+    raise ElementWithSelectorNotFoundException(selector)
+botasaurus_driver.exceptions.ElementWithSelectorNotFoundException: Cannot find element with selector: 'input[name='password']'.

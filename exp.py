@@ -23,18 +23,26 @@ YAHOO_PASSWORD = "@$%^Harish$$543"
 RECIPIENT_EMAILS = [
     "sgautamsharma146@gmail.com",
     "sgautamsharma146@gmail.com",
-    "sgautamsharma146@gmail.com"
-    
+    "sgautamsharma146@gmail.com",
+    "example1@gmail.com",
+    "example2@gmail.com",
+    "example3@gmail.com"
 ]
 
 # Subject
-SUBJECT = " What can Robot's do? "
+SUBJECT = "What can Robot's do?"
 
 # Message body
 BODY = "Essentially, there are as many different types of robots as there are tasks for them to perform. Robots can perform some tasks better than humans, but others are best left to people and not machines. Click this to read more  https://bitshrt.com/4Br"
 
+# Retry time interval (5 minutes)
+RETRY_TIME = 300  # 5 minutes in seconds
+
+# Maximum number of emails to send in one batch
+BATCH_SIZE = 3  # You can adjust this to 3 or 4 as per your need
+
 @browser(tiny_profile=True, profile=YAHOO_EMAIL)
-def yahoo_login_task(driver: Driver, data):
+def yahoo_login_task(driver: Driver, data, pending_emails):
     # Step 1: Navigate to Yahoo Mail
     driver.get("https://mail.yahoo.com/d/onboarding")
 
@@ -43,7 +51,7 @@ def yahoo_login_task(driver: Driver, data):
         compose_button = driver.get_element_with_exact_text("Compose", wait=Wait.SHORT)
         if compose_button:
             print("User is already logged in. Skipping login process and starting email composition.")
-            start_composing_emails(driver)  # If logged in, start composing
+            start_composing_emails(driver, pending_emails)  # If logged in, start composing
             return
     except Exception:
         print("User is not logged in. Proceeding with login process...")
@@ -71,53 +79,73 @@ def yahoo_login_task(driver: Driver, data):
     try:
         inbox_element = driver.wait_for_element("a[title='Inbox']", wait=Wait.LONG)
         print("Inbox page has loaded.")
-        start_composing_emails(driver)  # Now that we're logged in, start composing emails
+        start_composing_emails(driver, pending_emails)  # Now that we're logged in, start composing emails
     except Exception as e:
         print("Inbox did not load properly:", str(e))
         return  # Exit if inbox doesn't load
 
 # Function to compose and send emails
-def start_composing_emails(driver: Driver):
+def start_composing_emails(driver: Driver, pending_emails):
     total_sent = 0  # Initialize a counter for sent emails
-    for recipient in RECIPIENT_EMAILS:
-        time.sleep(2)  # Ensure that the inbox is fully loaded
+    remaining_emails = []  # List to track emails that failed to send
+    
+    # Send emails in batches
+    for i in range(0, len(pending_emails), BATCH_SIZE):
+        batch = pending_emails[i:i+BATCH_SIZE]  # Get a batch of 3-4 emails
+        print(f"Sending batch: {batch}")
+        
+        for recipient in batch:
+            time.sleep(2)  # Ensure that the inbox is fully loaded
 
-        # Step 7: Click the "Compose" button
-        try:
-            compose_button = driver.get_element_with_exact_text("Compose", wait=Wait.LONG)
-            compose_button.click()
-        except Exception as e:
-            print(f"Compose button not found for {recipient}: {str(e)}")
-            continue  # Skip to the next recipient if the compose button is not found
+            # Step 7: Click the "Compose" button
+            try:
+                compose_button = driver.get_element_with_exact_text("Compose", wait=Wait.LONG)
+                compose_button.click()
+            except Exception as e:
+                print(f"Compose button not found for {recipient}: {str(e)}")
+                remaining_emails.append(recipient)  # Add to remaining list if failed
+                continue  # Skip to the next recipient if the compose button is not found
 
-        # Step 8: Add recipient email
-        sender_input = driver.wait_for_element("input[id='message-to-field']", wait=Wait.LONG)
-        sender_input.type(recipient)
+            # Step 8: Add recipient email
+            sender_input = driver.wait_for_element("input[id='message-to-field']", wait=Wait.LONG)
+            sender_input.type(recipient)
 
-        # Step 9: Add the subject
-        subject_input = driver.wait_for_element("input[data-test-id='compose-subject']", wait=Wait.LONG)
-        subject_input.type(SUBJECT)
-        pyautogui.hotkey('tab')
+            # Step 9: Add the subject
+            subject_input = driver.wait_for_element("input[data-test-id='compose-subject']", wait=Wait.LONG)
+            subject_input.type(SUBJECT)
+            pyautogui.hotkey('tab')
 
-        time.sleep(2)
-        pyautogui.hotkey('tab')
-        time.sleep(2)
+            time.sleep(2)
+            pyautogui.hotkey('tab')
+            time.sleep(2)
 
-        # Step 10: Add the body
-        body_input = driver.wait_for_element("div[role='textbox']", wait=Wait.LONG)
-        body_input.type(BODY)
-        time.sleep(3)
+            # Step 10: Add the body
+            body_input = driver.wait_for_element("div[role='textbox']", wait=Wait.LONG)
+            body_input.type(BODY)
+            time.sleep(3)
 
-        # Step 11: Click the "Send" button
-        try:
-            send_button = driver.get_element_with_exact_text("Send", wait=Wait.LONG)
-            send_button.click()
-            print(f"Email successfully sent to {recipient}.")
-            total_sent += 1  # Increment the counter for each successfully sent email
-        except Exception as e:
-            print(f"Send button not found for {recipient}: {str(e)}")
+            # Step 11: Click the "Send" button
+            try:
+                send_button = driver.get_element_with_exact_text("Send", wait=Wait.LONG)
+                send_button.click()
+                print(f"Email successfully sent to {recipient}.")
+                total_sent += 1  # Increment the counter for each successfully sent email
+            except Exception as e:
+                print(f"Send button not found for {recipient}: {str(e)}")
+                remaining_emails.append(recipient)  # Add to remaining list if failed
 
-    print(f"Total emails sent: {total_sent}")  # Print total count of sent emails
+        print(f"Batch complete. Total emails sent so far: {total_sent}")
 
-# Execute the login task and send emails
-yahoo_login_task(data=None)
+        # After each batch, wait for 5 minutes before sending the next batch
+        if i + BATCH_SIZE < len(pending_emails):
+            print(f"Waiting for {RETRY_TIME/60} minutes before sending the next batch...")
+            time.sleep(RETRY_TIME)
+
+    # If there are remaining emails, retry
+    if remaining_emails:
+        print(f"Retrying for {len(remaining_emails)} remaining emails in 5 minutes...")
+        time.sleep(RETRY_TIME)
+        yahoo_login_task(driver, data=None, pending_emails=remaining_emails)  # Retry with remaining emails
+
+# Initial call to the login task
+yahoo_login_task(data=None, pending_emails=RECIPIENT_EMAILS)

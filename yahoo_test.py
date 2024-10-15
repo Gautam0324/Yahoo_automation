@@ -1,14 +1,84 @@
 import time
 import subprocess
 import random
+import requests
 from datetime import datetime, timedelta
 from botasaurus.browser import browser, Driver, Wait
 import pyautogui
 import os
+# Function to run ADB commands
+def run_adb_command(command):
+
+    try:
+        result = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        return result.stdout.decode('utf-8') 
+    except subprocess.CalledProcessError as e:
+        print(f"Error running ADB command: {e.stderr.decode('utf-8')}")
+        return None
+
+
+# Function to get the current IP address
+def get_current_ip():
+    try:
+        response = requests.get('https://api.ipify.org?format=json')
+        response.raise_for_status()
+        return response.json().get('ip')
+    except requests.RequestException as e:
+        print(f"Error fetching current IP: {e}")
+        return None
+    
+# Function to change the IP address by toggling flight mode
+def change_ip():
+    try:
+        # time.sleep(20)
+        print('Enabling flight mode...')
+        run_adb_command('adb shell cmd connectivity airplane-mode enable')
+        print('Waiting for 10 seconds...')
+        time.sleep(10)
+        
+        print('Disabling flight mode...')
+        run_adb_command('adb shell cmd connectivity airplane-mode disable')
+        print('Waiting for 20 seconds...')
+        time.sleep(20)  # Increase this wait time to allow the network to stabilize
+        
+        print('Waiting for IP to change...')
+        time.sleep(10)
+
+        
+        new_ip = get_current_ip()
+        
+        if new_ip:
+            print(f"New IP: {new_ip}")
+        else:
+            print("New IP not found!")
+
+        return new_ip
+    except Exception as error:
+        print('Error during IP change:', error)
+        return None
+
+def is_ip_used(ip, filename='yahoo.txt'):
+    
+    try:
+        # Open the file in read mode
+        with open(filename, 'r') as file:
+            used_ips = file.read().splitlines()
+            
+            # Loop through each line in the file
+            for entry in used_ips:
+                # Split the IP and the date (if present) and compare only the IP part
+                stored_ip = entry.split(' - ')[0].strip()  # Extract the IP part and remove extra spaces
+                if stored_ip == ip:
+                    return True  # IP is already used
+            return False  # IP not found in the file
+    except FileNotFoundError:
+        # If the file doesn't exist, consider that no IP has been used yet
+        return False
+    
 
 # Define the Yahoo credentials
-YAHOO_EMAIL = "harishjain8764@yahoo.com"
-YAHOO_PASSWORD = "@$%^Harish$$543"
+YAHOO_EMAIL = "ojhanaman78911@yahoo.com"
+YAHOO_PASSWORD = "@$%Naman667$543"
 
 # Define the list of recipient email addresses
 RECIPIENT_EMAILS = [
@@ -88,6 +158,7 @@ def yahoo_login_task(driver: Driver, data):
     driver.get("https://mail.yahoo.com/d/onboarding")
 
     # Step 2: Check if the user is already logged in
+    time.sleep(40)
     try:
         compose_button = driver.get_element_with_exact_text("Compose", wait=Wait.SHORT)
         if compose_button:
@@ -98,15 +169,17 @@ def yahoo_login_task(driver: Driver, data):
         print("User is not logged in. Proceeding with login process...")
 
     # Step 3: Enter the email
-    email_input = driver.wait_for_element("input[name='username']", wait=Wait.LONG)
-    email_input.type(YAHOO_EMAIL)
-    driver.select("#login-signin").click()
+    new_ip = change_ip()
+    if new_ip and not is_ip_used(new_ip):
+        email_input = driver.wait_for_element("input[name='username']", wait=Wait.LONG)
+        email_input.type(YAHOO_EMAIL)
+        driver.select("#login-signin").click()
 
     # Step 4: Wait for the password field and enter the password
-    time.sleep(2)
-    password_input = driver.wait_for_element("input[name='password']", wait=Wait.LONG)
-    password_input.type(YAHOO_PASSWORD)
-    driver.select("#login-signin").click()
+        time.sleep(10)
+        password_input = driver.wait_for_element("input[name='password']", wait=Wait.LONG)
+        password_input.type(YAHOO_PASSWORD)
+        driver.select("#login-signin").click()
 
     # Step 5: Handle post-login prompts (if any)
     try:
@@ -116,8 +189,8 @@ def yahoo_login_task(driver: Driver, data):
         pass  # If "Not now" doesn't appear, proceed anyway
 
     # Step 6: Wait for the inbox to load by checking for a unique element
-    time.sleep(10)
     try:
+        time.sleep(40)
         inbox_element = driver.wait_for_element("a[title='Inbox']", wait=Wait.LONG)
         print("Inbox page has loaded.")
         start_composing_emails(driver)
@@ -127,11 +200,13 @@ def yahoo_login_task(driver: Driver, data):
 
 
 # Function to compose and send emails
+import random
+
 def start_composing_emails(driver: Driver):
     sent_emails = load_sent_emails()  # Load already sent emails
     total_recipients = len(RECIPIENT_EMAILS)
     current_index = 0
-    limit = 4  # Set limit for emails to be sent in one run
+    limit = random.randint(3, 4)  # Randomly set the limit for emails to be sent in one run (3 or 4)
     sent_count = 0  # Counter for sent emails
 
     while current_index < total_recipients and sent_count < limit:
@@ -174,6 +249,7 @@ def start_composing_emails(driver: Driver):
         try:
             send_button = driver.get_element_with_exact_text("Send", wait=Wait.LONG)
             send_button.click()
+            time.sleep(10)
             sending_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             print(f"Email successfully sent to {recipient} at {sending_time}.")
             sent_emails.add(recipient)  # Add to the set of sent emails
@@ -187,8 +263,8 @@ def start_composing_emails(driver: Driver):
         except Exception as e:
             print(f"Send button not found for {recipient}: {str(e)}")
 
-        # Add random delay between 30 and 90 seconds before sending the next email
-        random_delay = random.randint(30, 90)
+        # Add random delay between 30 and 40 seconds before sending the next email
+        random_delay = random.randint(30, 40)
         countdown_timer(random_delay)  # Call the countdown timer
         time.sleep(random_delay)
 
@@ -213,7 +289,7 @@ def countdown_timer(seconds):
         print(f"Next email in: {time_format}", end='\r')
         time.sleep(1)
         seconds -= 1
-    print("\nTime to send the next email!")
+    print("\nTime to restart the process")
 
 
 # Main program execution
@@ -221,5 +297,6 @@ if __name__ == "__main__":
     reset_sent_emails_if_needed()  # Reset the sent_emails.txt if necessary before starting
     while True:
         yahoo_login_task(data=None)
-        print("Waiting for 2 minutes before repeating the process...")
-        time.sleep(120)  # Wait for 2 minutes before starting again
+        print("Waiting for 5 minutes before repeating the process...")
+        # Wait for 5 minutes before starting again
+        countdown_timer(300)
