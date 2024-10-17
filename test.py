@@ -8,25 +8,6 @@ import pyautogui
 import os
 import json
 
-# Load Yahoo credentials from JSON
-def load_yahoo_credentials(filename="yahoo_account_details.json"):
-    try:
-        with open(filename, "r") as json_file:
-            return json.load(json_file)
-    except FileNotFoundError:
-        print(f"{filename} not found. Please save Yahoo credentials first.")
-        return None
-
-# Load recipient emails from JSON
-def load_recipient_emails(filename="recipient_emails.json"):
-    try:
-        with open(filename, "r") as json_file:
-            data = json.load(json_file)
-            return data.get("recipients", [])
-    except FileNotFoundError:
-        print(f"{filename} not found. Please save recipient emails first.")
-        return []
-
 # Function to run ADB commands
 def run_adb_command(command):
     try:
@@ -87,6 +68,52 @@ def is_ip_used(ip, filename='yahoo.txt'):
     except FileNotFoundError:
         return False
 
+# Save Yahoo credentials in a JSON file
+def save_yahoo_credentials(email, password, filename="yahoo_account_details.json"):
+    yahoo_account = {
+        "email": email,
+        "password": password
+    }
+    with open(filename, "w") as json_file:
+        json.dump(yahoo_account, json_file, indent=4)
+    print(f"Yahoo account details saved in {filename}")
+
+# Save recipient emails in a JSON file
+def save_recipient_emails(recipients, filename="recipient_emails.json"):
+    data = {
+        "recipients": recipients
+    }
+    with open(filename, "w") as json_file:
+        json.dump(data, json_file, indent=4)
+    print(f"Recipient emails saved in {filename}")
+
+# Function to reset recipient email list
+def reset_recipient_emails_file(filename="recipient_emails.json"):
+    with open(filename, "w") as file:
+        json.dump({"recipients": []}, file, indent=4)
+    print(f"{filename} has been reset and is now empty.")
+
+# Function to reset sent_emails.txt file
+def reset_sent_emails_file(filename="sent_emails.txt"):
+    with open(filename, "w") as file:
+        file.write("")
+    print(f"{filename} has been reset and is now empty.")
+
+# Define the Yahoo credentials
+YAHOO_EMAIL = "rj5314@yahoo.com"
+YAHOO_PASSWORD = "PHXIT@2005#"                      
+
+# Define the list of recipient email addresses
+RECIPIENT_EMAILS = [
+    # Add recipient emails here...
+]
+
+# Subject
+SUBJECT = "Trudeau alone responsible for damage to India-Canada relations: MEA"
+
+# Message body
+BODY = "India has firmly refuted Canadian PM Justin Trudeau's claims about Indian involvement in the death of Khalistani leader Hardeep Singh Nijjar, citing the lack of hard evidence. This diplomatic spat has severely strained India-Canada relations, with both nations engaging in tit-for-tat expulsions of diplomats. Click here to read more  https://bitshrt.com/4C1"
+
 # File to save sent email addresses
 SENT_EMAILS_FILE = "sent_emails.txt"
 # File to store the last reset time
@@ -115,19 +142,19 @@ def save_last_reset_time():
         file.write(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
 # Reset sent emails if needed
-def reset_sent_emails_if_needed():
+def reset_files_if_needed():
     last_reset_time = load_last_reset_time()
     now = datetime.now()
 
     if last_reset_time is None or now - last_reset_time >= timedelta(hours=24):
-        with open(SENT_EMAILS_FILE, "w") as file:
-            file.write("")
-        print("24 hours have passed. sent_emails.txt has been reset.")
-        save_last_reset_time()
+        reset_recipient_emails_file()  # Automatically reset the recipient email file
+        reset_sent_emails_file()  # Automatically reset the sent emails file
+        save_last_reset_time()  # Update the last reset time
+        print("Both files have been reset as 24 hours have passed.")
     else:
         print("Less than 24 hours since the last reset. No reset needed.")
 
-@browser(tiny_profile=True, profile="rj5314@yahoo.com")
+@browser(tiny_profile=True, profile=YAHOO_EMAIL)
 def yahoo_login_task(driver: Driver, data):
     driver.get("https://mail.yahoo.com/d/onboarding")
     time.sleep(20)
@@ -143,17 +170,13 @@ def yahoo_login_task(driver: Driver, data):
 
     new_ip = change_ip()
     if new_ip and not is_ip_used(new_ip):
-        yahoo_credentials = load_yahoo_credentials()
-        if yahoo_credentials is None:
-            return
-
         email_input = driver.wait_for_element("input[name='username']", wait=Wait.LONG)
-        email_input.type(yahoo_credentials['email'])
+        email_input.type(YAHOO_EMAIL)
         driver.select("#login-signin").click()
 
         time.sleep(10)
         password_input = driver.wait_for_element("input[name='password']", wait=Wait.LONG)
-        password_input.type(yahoo_credentials['password'])
+        password_input.type(YAHOO_PASSWORD)
         driver.select("#login-signin").click()
 
     try:
@@ -174,19 +197,13 @@ def yahoo_login_task(driver: Driver, data):
 # Function to compose and send emails
 def start_composing_emails(driver: Driver):
     sent_emails = load_sent_emails()
-    recipient_emails = load_recipient_emails()
-
-    if not recipient_emails:
-        print("No recipient emails found.")
-        return
-
-    total_recipients = len(recipient_emails)
+    total_recipients = len(RECIPIENT_EMAILS)
     current_index = 0
     limit = random.randint(3, 4)
     sent_count = 0
 
     while current_index < total_recipients and sent_count < limit:
-        recipient = recipient_emails[current_index]
+        recipient = RECIPIENT_EMAILS[current_index]
 
         if recipient in sent_emails:
             current_index += 1
@@ -205,7 +222,7 @@ def start_composing_emails(driver: Driver):
         sender_input.type(recipient)
 
         subject_input = driver.wait_for_element("input[data-test-id='compose-subject']", wait=Wait.LONG)
-        subject_input.type("Congress to stay out of Omar govt, NC denies")
+        subject_input.type(SUBJECT)
         pyautogui.hotkey('tab')
 
         time.sleep(2)
@@ -213,7 +230,7 @@ def start_composing_emails(driver: Driver):
         time.sleep(2)
 
         body_input = driver.wait_for_element("div[role='textbox']", wait=Wait.LONG)
-        body_input.type("Hours to go for National Conference (NC) vice-president Omar Abdullah to take oath as the new Chief Minister...")
+        body_input.type(BODY)
         time.sleep(3)
 
         try:
@@ -226,27 +243,15 @@ def start_composing_emails(driver: Driver):
             sent_count += 1
 
             with open(SENT_EMAILS_FILE, "a") as file:
-                file.write(f"{recipient}\n")
+                file.write(f"{recipient} - {sending_time}\n")
 
             current_index += 1
         except Exception as e:
-            print(f"Send button not found for {recipient}: {str(e)}")
+            print(f"Error sending email to {recipient}: {str(e)}")
+            current_index += 1
 
-        random_delay = random.randint(30, 40)
-        countdown_timer(random_delay)
-        time.sleep(random_delay)
+# Call the reset function at the beginning if 24 hours have passed
+reset_files_if_needed()
 
-    # Exit the loop if all emails are sent
-    if current_index >= total_recipients:
-        print("All emails have been sent.")
-
-def countdown_timer(seconds):
-    for remaining in range(seconds, 0, -1):
-        print(f"{remaining} seconds remaining...", end="\r")
-        time.sleep(1)
-
-# Example usage to save credentials and recipient emails in JSON
-# save_yahoo_credentials("rj5314@yahoo.com", "PHXIT@2005#")
-# save_recipient_emails(load_recipient_emails())
-
-# reset_sent_emails_if_needed()
+# Start the Yahoo login task
+yahoo_login_task()

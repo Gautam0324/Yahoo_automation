@@ -1,0 +1,33 @@
+Traceback (most recent call last):
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\botasaurus\browser_decorator.py", line 184, in run_task
+    close_driver(driver)
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\botasaurus\browser_decorator.py", line 12, in close_driver
+    driver.close()
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\botasaurus_driver\driver.py", line 1398, in close
+    save_cookies(self, self.config.profile)
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\botasaurus_driver\tiny_profile.py", line 12, in save_cookies
+    cookies = driver.get_cookies()
+              ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\botasaurus_driver\driver.py", line 1183, in get_cookies
+    return self._run(self._browser.cookies.get_all())
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\botasaurus_driver\core\browser.py", line 455, in get_all
+    cookies = connection.send(get_cookies())
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\botasaurus_driver\core\connection.py", line 249, in send
+    self.websocket.send(tx)
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\websocket\_app.py", line 290, in send
+    if not self.sock or self.sock.send(data, opcode) == 0:
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\websocket\_core.py", line 297, in send
+    return self.send_frame(frame)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\websocket\_core.py", line 337, in send_frame
+    l = self._send(data)
+        ^^^^^^^^^^^^^^^^
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\websocket\_core.py", line 559, in _send
+    return send(self.sock, data)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\naugh\AppData\Local\Programs\Python\Python312\Lib\site-packages\websocket\_socket.py", line 152, in send
+    raise WebSocketConnectionClosedException("socket is already closed.")
+websocket._exceptions.WebSocketConnectionClosedException: socket is already closed.
